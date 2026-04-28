@@ -13,6 +13,7 @@ import com.ghada.library.libraryService.ReportService;
 
 @RestController
 @PreAuthorize("hasRole('USER')")
+//returns data for member dashbaord
 @RequestMapping("/library/memberDashboard")
 public class MemberDashboardController {
 

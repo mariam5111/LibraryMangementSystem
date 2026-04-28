@@ -12,15 +12,23 @@ public class Book {
     private String author;
     private String isbn;
     private Integer copies;
+    private String imageUrl;
     
     @Version
     private Long version;
 
     public Book() {}
-    public Book(String title, String author, String isbn, Integer copies){
+    public Book(String title, String author, String isbn, Integer copies, String imageUrl){
         this.title = title; this.author = author; this.isbn = isbn; this.copies = copies;
+        this.imageUrl =imageUrl;
     }
     // getters & setters
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     public String getId(){ return id; }
     public void setId(String id){ this.id = id; }
     public String getTitle(){ return title; }

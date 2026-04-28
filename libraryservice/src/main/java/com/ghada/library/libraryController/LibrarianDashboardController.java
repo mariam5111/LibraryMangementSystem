@@ -12,6 +12,7 @@ import com.ghada.library.libraryService.ReportService;
 import com.ghada.library.libraryService.adminService;
 
 @RestController
+//returns data for librarian dashboard
 @RequestMapping("/library/librarianDashboard")
 @PreAuthorize("hasRole('LIBRARIAN')")
 public class LibrarianDashboardController {

@@ -30,6 +30,7 @@ public class BookServiceImpl implements BookService {
         exist.setAuthor(b.getAuthor());
         exist.setIsbn(b.getIsbn());
         exist.setCopies(b.getCopies());
+        exist.setImageUrl(b.getImageUrl());
         return repo.save(exist);
     }
      @Override
