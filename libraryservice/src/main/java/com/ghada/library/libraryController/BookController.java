@@ -29,21 +29,21 @@ public class BookController {
     }
 
     //Create book available
-    @PostMapping 
+    @PostMapping ("/add")
     @PreAuthorize("hasAnyRole('LIBRARIAN')")
     public ResponseEntity<Book> create(@RequestBody Book book){
         Book saved = service.create(book);
         return ResponseEntity.status(201).body(saved);
     }
     //Update book 
-    @PutMapping("/{id}")
+    @PutMapping("/edit/{id}")
     @PreAuthorize("hasAnyRole('LIBRARIAN')")
     public ResponseEntity<Book> update(@PathVariable String id, @RequestBody Book book){
         Book updated = service.update(id, book);
         return updated == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(updated);
     }
     //Delete Book
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyRole('LIBRARIAN')")
     public ResponseEntity<Void> delete(@PathVariable String id){
         service.delete(id);

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/library/adminDashboard")
+@RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminDashboardController {
 
@@ -31,7 +31,7 @@ public class AdminDashboardController {
     @Autowired
     private ReportService reportService;
 
-    @GetMapping
+    @GetMapping("/dashboard")
     public AdminDashboardDTO getDashboard(){
         return new AdminDashboardDTO(
             adminService.countTotalUsers(null),

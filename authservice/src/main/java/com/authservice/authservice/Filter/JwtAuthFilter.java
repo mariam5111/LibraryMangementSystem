@@ -51,10 +51,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
                 String path = request.getServletPath();
 
-                if (path.startsWith("/authentication")) {
+                if (path.startsWith("/auth")) {
                     filterChain.doFilter(request, response);
-                        return;
-                        }
+                    return;
+                }
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
                 if(jwtService.validateToken(JwtToken, userDetails)){
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

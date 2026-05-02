@@ -1,7 +1,6 @@
 package com.ghada.library.libraryController;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import com.ghada.library.libraryService.ReportService;
 import com.ghada.library.Security.JwtService;
 
 @RestController
-@RequestMapping("/library/borrow")
+@RequestMapping("/borrow")
 public class BorrowController {
 
     @Autowired
@@ -31,7 +30,7 @@ public class BorrowController {
     //in list of borrowing users, approval, pending returns etc
 
     @PreAuthorize("hasRole('LIBRARIAN')")
-    @GetMapping("/getAllBorrows")
+    @GetMapping("/list")
     public List<Borrow> getAllBorrows() {
         return reportService.getAllBorrows();
     }
@@ -53,10 +52,11 @@ public class BorrowController {
     }
 
     // get borrow history per user
-    /*@GetMapping("/history/{id}")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/history/{id}")
     public List<Borrow> getBorrowByUserId(@PathVariable String id) {
         return reportService.getBorrowsByUserId(id);
-    }*/
+    }
 
    
 //approval and rejecton endpoints for librarian

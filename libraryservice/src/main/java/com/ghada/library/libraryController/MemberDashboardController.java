@@ -14,7 +14,7 @@ import com.ghada.library.libraryService.ReportService;
 @RestController
 @PreAuthorize("hasRole('USER')")
 //returns data for member dashbaord
-@RequestMapping("/library/memberDashboard")
+@RequestMapping("/member")
 public class MemberDashboardController {
 
     @Autowired
@@ -22,7 +22,7 @@ public class MemberDashboardController {
     @Autowired
     private JwtService jwtService;
 
-    @GetMapping
+    @GetMapping("/dashboard")
     public MemberDashboardDTO getDashboard(@RequestHeader("Authorization") String authHeader) {
         
         String id = jwtService.extractId(authHeader.substring(7));
