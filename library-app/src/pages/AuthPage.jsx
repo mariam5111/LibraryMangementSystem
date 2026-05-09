@@ -130,7 +130,7 @@ export default function AuthPage() {
                 />
               </div>
               <Btn variant="primary" className="w-full justify-center" onClick={doRegister} disabled={loading}>
-                {loading ? 'Creating…' : 'Create account'}
+                {loading ? 'Creating…!' : 'Create account'}
               </Btn>
             </div>
           )}
