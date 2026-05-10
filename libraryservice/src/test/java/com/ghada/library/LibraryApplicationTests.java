@@ -9,5 +9,9 @@ class LibraryApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
+	void testAddBook() {
+		
+	}	
+  void testGetBookById() {
+}
 }
