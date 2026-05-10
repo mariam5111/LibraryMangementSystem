@@ -1,15 +1,22 @@
-
-FROM eclipse-temurin:17-jdk
-
+# Stage 1: Build the application
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 
-COPY mvnw .
-COPY .mvn .mvn
+# Copy only the pom.xml to cache dependencies
 COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy source and build
 COPY src ./src
-RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
+
+# Stage 2: Create the runtime image
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+# Copy the JAR from the build stage and rename it to keep it simple
+COPY --from=build /app/target/*.jar library-service.jar
 
 EXPOSE 8082
 
-CMD ["java", "-jar", "target/library-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "library-service.jar"]

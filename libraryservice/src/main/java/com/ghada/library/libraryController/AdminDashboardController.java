@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/library/adminDashboard")
+@RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminDashboardController {
 
@@ -31,7 +31,7 @@ public class AdminDashboardController {
     @Autowired
     private ReportService reportService;
 
-    @GetMapping
+    @GetMapping("/dashboard")
     public AdminDashboardDTO getDashboard(){
         return new AdminDashboardDTO(
             adminService.countTotalUsers(null),
@@ -42,15 +42,17 @@ public class AdminDashboardController {
 
         );
     }
-
+    //list of all users for admin to manage
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return adminService.getAllUsers();
     }
+    //user search
     @GetMapping("users/search")
     public List<User> searchByUsername(@RequestParam String name){
         return adminService.searchByUsername(name);
     }
+    //update username and user role in edit user
     @PutMapping("users/{id}/username")
     public User updateUsername(@PathVariable String id, @RequestBody String name){
         return adminService.updateName(id, name);
@@ -62,6 +64,7 @@ public class AdminDashboardController {
     ) {
         return adminService.updateRoles(id, roles);
     }
+    //might delete or replace with deactivation
     @DeleteMapping("/users/{id}")
     public void delete(@PathVariable String id) {
         adminService.deleteUser(id);

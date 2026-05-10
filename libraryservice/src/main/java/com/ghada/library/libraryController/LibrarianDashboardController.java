@@ -12,7 +12,8 @@ import com.ghada.library.libraryService.ReportService;
 import com.ghada.library.libraryService.adminService;
 
 @RestController
-@RequestMapping("/library/librarianDashboard")
+//returns data for librarian dashboard
+@RequestMapping("/librarian")
 @PreAuthorize("hasRole('LIBRARIAN')")
 public class LibrarianDashboardController {
 
@@ -21,7 +22,7 @@ public class LibrarianDashboardController {
     @Autowired
     ReportService service;
 
-    @GetMapping
+    @GetMapping("/dashboard")
     public LibrarianDashboardDTO getDashboard() {
         return new LibrarianDashboardDTO(
                 service.countBooksIssuedToday(),

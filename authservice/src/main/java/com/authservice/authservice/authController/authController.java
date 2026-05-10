@@ -30,7 +30,7 @@ import java.util.List;
 //also passwords are encoded using BCrypt
 // + signing key for JWT is defined in application.properties file and encoded in base64 format
 @RestController
-@RequestMapping("/authentication")
+@RequestMapping("/auth")
 public class authController {
 
     private UserInfoService userservice;

@@ -26,4 +26,6 @@ public class GatewayUriConfiguration {
     public void setAuthServiceUri(String authServiceUri) {
         this.authServiceUri = authServiceUri;
     }
+
+    
 }

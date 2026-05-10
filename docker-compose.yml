@@ -1,68 +1,72 @@
 version: '3.8'
-
 services:
-  # 1. THE MONGODB SERVICE DEFINITION
+
   mongo_container:
     image: mongo:latest
     container_name: mongo_container
     restart: always
-    # Expose the default Mongo port (27017) inside the Docker network
     ports:
-      # Optional: Maps container port to host port (27017:27017)
       - "27017:27017"
-    command: [ "mongod", "--bind_ip_all" ] # Ensure it listens on all interfaces
+    command: ["mongod", "--bind_ip_all"]
     volumes:
       - ./mongo_data:/data/db
-
     healthcheck:
-      test: mongosh --eval 'db.runCommand("ping").ok' localhost:27017/test --quiet > /dev/null 2>&1
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
       interval: 10s
-      timeout: 10s
+      timeout: 5s
       retries: 5
-      start_period: 40s
+      start_period: 20s
 
-  # 2. THE AUTH SERVICE DEFINITION
   auth-service:
     build:
-      context: ./authservice # <-- REPLACE with your actual auth-service folder path
+      context: ./authservice
       dockerfile: Dockerfile
     container_name: auth-service
     ports:
-      - "8081:8081" # Map service port
+      - "8081:8081"
     environment:
-      # CRITICAL FIX: Use the correct Spring Data MongoDB URI environment variable
       - SPRING_DATA_MONGODB_URI=mongodb://mongo_container:27017/mydatabase
-      # Add server port if needed (based on your service logs, it uses 8081)
       - SERVER_PORT=8081
     depends_on:
       mongo_container:
         condition: service_healthy
 
-  # 3. THE LIBRARY SERVICE DEFINITION
   library-service:
     build:
-      context: ./libraryservice # <-- REPLACE with your actual library-service folder path
+      context: ./libraryservice
       dockerfile: Dockerfile
     container_name: library-service
     ports:
-      - "8082:8082" # Map service port
+      - "8082:8082"
     environment:
-      # CRITICAL FIX: Use the correct Spring Data MongoDB URI environment variable
       - SPRING_DATA_MONGODB_URI=mongodb://mongo_container:27017/librarydb
-      # Add server port if needed (based on your service logs, it uses 8082)
       - SERVER_PORT=8082
     depends_on:
       mongo_container:
         condition: service_healthy
 
-  # 4. THE GATEWAY SERVICE (Optional, based on your logs)
   gateway-service:
     build:
-      context: ./gateway # <-- REPLACE with your actual gateway-service folder path
+      context: ./gateway
       dockerfile: Dockerfile
     container_name: gateway-service
     ports:
-      - "8080:8080" # Map service port (based on your logs)
+      - "8080:8080"
+    environment:
+      - GATEWAY_AUTH_SERVICE_URI=http://auth-service:8081
+      - GATEWAY_LIBRARY_SERVICE_URI=http://library-service:8082
     depends_on:
       - auth-service
       - library-service
+
+  frontend:
+    build:
+      context: ./library-app
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8080
+    container_name: frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - gateway-service
