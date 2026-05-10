@@ -9,5 +9,8 @@ class LibraryApplicationTests {
 	@Test
 	void contextLoads() {
 	}
+	void testAddBook() {
+		// Test adding a book to the library
+	}	
 
 }
