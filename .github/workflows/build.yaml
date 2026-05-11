@@ -1,0 +1,45 @@
+name: Build and Test Docker Compose
+
+on:
+  push:
+    branches: [ "cleaned-branch-for-PM" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build all Docker images using docker-compose
+        run: docker-compose build
+
+      - name: Start all services in background
+        run: docker-compose up -d
+
+      - name: Wait for MongoDB to be ready
+        run: |
+          echo "Waiting for MongoDB to be ready..."
+          until docker exec mongo_container mongosh --quiet --eval "db.adminCommand('ping')" > /dev/null 2>&1; do
+            sleep 2
+          done
+
+      - name: Check running containers
+        run: docker ps
+
+      - name: (Optional) Test health endpoints
+        run: |
+          curl --fail http://localhost:8081/actuator/health || true
+          curl --fail http://localhost:8082/actuator/health || true
+          curl --fail http://localhost:8080/actuator/health || true
+
+      - name: View logs if needed
+        if: failure()
+        run: docker-compose logs
+
+      - name: Stop all containers
+        run: docker-compose down
