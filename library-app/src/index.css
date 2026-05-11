@@ -15,7 +15,7 @@
 
 @layer utilities {
   .shimmer {
-    background: linear-gradient(90deg, #f0ede6 25%, #e8e5de 50%, #f0ede6 75%);
+    background: linear-gradient(90deg, #876a25 25%, #e8e5de 50%, #f0ede6 75%);
     background-size: 200% 100%;
     animation: shimmer 1.2s infinite;
     border-radius: 4px;
