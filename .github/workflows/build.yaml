@@ -7,39 +7,63 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
+     
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Build all Docker images using docker-compose
+      - name: Build all Docker images
         run: docker compose build
-
-      - name: Start all services in background
+      - name: Start all services
         run: docker compose up -d
-
-      - name: Wait for MongoDB to be ready
+      - name: Wait for MongoDB
         run: |
-          echo "Waiting for MongoDB to be ready..."
+          echo "Waiting for MongoDB..."
           until docker exec mongo_container mongosh --quiet --eval "db.adminCommand('ping')" > /dev/null 2>&1; do
             sleep 2
           done
-
-      - name: Check running containers
+      - name: Check containers
         run: docker ps
-
-      - name: (Optional) Test health endpoints
+      - name: Test endpoints (optional)
         run: |
           curl --fail http://localhost:8081/actuator/health || true
           curl --fail http://localhost:8082/actuator/health || true
           curl --fail http://localhost:8080/actuator/health || true
-
-      - name: View logs if needed
+      - name: Show logs if failure
         if: failure()
         run: docker compose logs
-
-      - name: Stop all containers
+      - name: Stop containers
         run: docker compose down
+
+  deploy-to-netlify:
+    needs: build               
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: library-app/package-lock.json
+
+      - name: Install dependencies and build frontend
+        run: |
+          cd library-app
+          npm ci
+          npm run build
+      
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: './library-app/dist'
+          production-branch: cleaned-branch-for-PM
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions build ${{ github.run_number }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
