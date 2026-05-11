@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies and build frontend
         run: |
           cd library-app
-          npm ci
+          npm install
           npm run build
       
 
@@ -67,3 +67,4 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        
