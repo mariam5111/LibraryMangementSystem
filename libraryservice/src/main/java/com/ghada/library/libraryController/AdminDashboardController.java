@@ -4,6 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ghada.library.libraryDTOs.AdminDashboardDTO;
@@ -12,14 +19,6 @@ import com.ghada.library.libraryModel.RequestStatus;
 import com.ghada.library.libraryModel.User;
 import com.ghada.library.libraryService.ReportService;
 import com.ghada.library.libraryService.adminService;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/admin")
@@ -71,3 +70,4 @@ public class AdminDashboardController {
     }
 
 }
+// AdminDashboardController is a REST controller that handles requests related to the admin dashboard. It includes endpoints for retrieving dashboard statistics, managing users, and updating user information. The controller uses the adminService and reportService to perform the necessary operations.
