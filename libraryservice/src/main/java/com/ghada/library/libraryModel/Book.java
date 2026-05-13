@@ -17,7 +17,6 @@ public class Book {
     //2nd commit comment
     //1st branch commit
     //1st branch  commit
-    //1st branch 2nd commit
     @Version
     private Long version;
 
