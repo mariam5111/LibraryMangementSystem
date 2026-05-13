@@ -15,7 +15,6 @@ public class Book {
     private String imageUrl;
     //1st commit comment
     //2nd commit comment
-    //1st branch commit
     @Version
     private Long version;
 
