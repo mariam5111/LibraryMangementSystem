@@ -14,7 +14,7 @@ public class Book {
     private Integer copies;
     private String imageUrl;
     //1st commit comment
-    //2nd commit comment
+    
     @Version
     private Long version;
 
