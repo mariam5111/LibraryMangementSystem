@@ -13,7 +13,7 @@ public class Book {
     private String isbn;
     private Integer copies;
     private String imageUrl;
-    
+    //1st commit comment
     @Version
     private Long version;
 
